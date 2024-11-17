@@ -7,6 +7,5 @@ has_children: true
 parent: Libs
 ---
 
-Because of the poor documentation of MiniLibX, we have decided to write a
-somewhat simple tutorial on how to use this obscure library. Feel free to send
-us (hsmits and jvan-sni) a thank you via slack ;)
+MiniLibX의 부족한 Documentation 때문에, 이 이해하기 힘든 라이브러리를 사용하는 방법에 대한 간단한 튜토리얼을 작성하기로 결정했습니다. 
+Slack을 통해 hsmits와 jvan-sni에게 감사의 DM을 보내주세요 ;)
