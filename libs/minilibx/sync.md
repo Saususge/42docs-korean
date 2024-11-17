@@ -17,20 +17,15 @@ nav_order: 8
 
 ---
 
-## What is sync?
+## 동기화(sync)란?
 
-As mentioned before, you could manage your own frame buffering with MLX, however
-this is fairly tedious and time consuming. Besides, we use more memory and our
-frames need to constantly be FULLY updated. This is not very efficient hence we
-need to avoid it at all costs.
+앞서 말했듯, MLX를 이용해 프레임 버퍼링을 자체적으로 관리 할 수 있지만, 이는 번거롭고 시간도 많이 듭니다. 심지어 메모리도 더 많이 사용하며 프레임도 계속해서 완전히 업데이트 되어야 하기때문에 매우 비효율적입니다. 이러한 상황은 가능한 피하는게 좋습니다.
 
-From the 2020 MLX version, you will be able to synchronize your own frames,
-which should make the hacky multiple images for screen buffering no longer
-required.
+2020년 MLX 버전부터는 자체 프레임을 동기화할 수 있어, 화면 버퍼링을 위한 여러 이미지 사용이 필요하지 않습니다.
 
-## Using sync
+## 동기화 하기(Using sync)
 
-We have three defines that we need to understand first:
+우리는 먼저 이해해야 할 세 가지 define 상수가 있습니다:
 
 ```c
 #define MLX_SYNC_IMAGE_WRITABLE		1
@@ -40,11 +35,8 @@ We have three defines that we need to understand first:
 int	mlx_sync(int cmd, void *ptr);
 ```
 
-`mlx_sync` ought to be called with the defined command codes. The first one,
-`MLX_SYNC_IMAGE_WRITABLE` will buffer all subsequential calls to an image (`ptr`
-is a pointer to the MLX image object). If you want to propagate changes, you
-will have to flush the window in which the image is present, using
-`MLX_SYNC_WIN_FLUSH_CMD` and the window you want to flush as a `ptr`.
+`mlx_sync`는 정의된 명령 코드와 함께 호출되어야 합니다. 첫째로
+`MLX_SYNC_IMAGE_WRITABLE`은 이미지에 대한 모든 후속 호출을 버퍼링합니다 (`ptr`은 MLX 이미지 객체를 가리키는 포인터입니다).변경사항을 반영하려면 `MLX_SYNC_WIN_FLUSH_CMD`와 함께 flush하려는 윈도우를 `ptr`로 전달하여 해당 이미지가 있는 윈도우를 flush해야 합니다.
 
 ## Test your skills!
 

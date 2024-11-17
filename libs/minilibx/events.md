@@ -17,23 +17,19 @@ nav_order: 4
 
 ---
 
-## Introduction
+## 소개
 
-Events are the foundation of writing interactive applications in MiniLibX. It is
-therefore of essence that you fully comprehend this chapter as this will be of
-use in your future graphical projects.
+이벤트는 MiniLibX에서 인터랙티브 애플리케이션을 작성하는 데 중요한 기반입니다. 따라서 이 장을 완전히 이해하는 것이 매우 중요하며, 이는 향후 그래픽 프로젝트에서 유용하게 사용될 것입니다.
 
-All hooks in MiniLibX are nothing more than a function that gets called whenever
-a event is triggered. Mastering all these events won't be neccessary, however,
-we will quickly go over each X11 event accordingly.
+MiniLibX의 모든 hook는 이벤트가 발생할 때마다 호출되는 함수일 뿐입니다. 모든 이벤트를 마스터할 필요는 없지만, 각 X11 이벤트에 대해 간략히 살펴보겠습니다.
+
+
 
 ### MacOS version
 
-Note: On MacOS - Cocoa (AppKit) and OpenGL - version, minilibx has partial support
-of X11 events and doesn't support X11 mask (x_mask argument of mlx_hook is useless,
-keep it at 0).
+참고: MacOS 버전에서는 Cocoa (AppKit)과 OpenGL이 사용되며, MiniLibX는 X11 이벤트에 대한 부분적인 지원만 제공하고, X11 마스크(x_mask 인자, mlx_hook에서 사용됨)는 지원하지 않으므로, 이 값을 0으로 설정해 두세요.
 
-Supported events:
+지원되는 이벤트들:
   
 ```c
 enum {
@@ -52,9 +48,7 @@ mlx_hook(vars.win, ON_DESTROY, 0, close, &vars);
 
 ## X11 interface
 
-X11 is the library that is used alongside of MiniLibX. It therefore is no secret
-that this header is very useful for finding all the according events of
-MiniLibX.
+X11은 MiniLibX와 함께 사용되는 라이브러리입니다. 때문에 X11헤더를 이용하면 MiniLibX의 모든 관련 이벤트를 찾을 수 있습니다.
 
 ### X11 events
 
@@ -76,15 +70,11 @@ There are a number of events to which you may describe.
 | `13` | GraphicsExpose| | `25` | ResizeRequest    | |      |                  |
 
 
-If you can't figure out what some events are, don't worry, because you probably
-won't need them. If you do, go read [the documentation of each X11 events](https://tronche.com/gui/x/xlib/events/).
+만약 이벤트 몇개가 이해가 안되더라도 걱정마세요. 아마 쓸일이 없을겁니다. 만약 이벤트에 대해 더 알고 싶다면 아래 링크를 참조하세요. [the documentation of each X11 events](https://tronche.com/gui/x/xlib/events/).
 
 ### X11 masks
 
-Each X11 event, also has an according mask. This way you can register to only
-one key when it triggers, or to all keys if you leave your mask to the default.
-Key masks therefore allow you to whitelist / blacklist events from your event
-subscriptions. The following masks are allowed:
+각 X11 이벤트는 해당하는 마스크(mask)를 가지고 있습니다. 이를 통해 특정 키가 트리거될 때 한 키만 등록하거나, 기본값으로 두면 모든 키에 등록할 수 있습니다. 키 마스크는 이벤트 구독에서 이벤트를 화이트리스트 또는 블랙리스트할 수 있게 해줍니다. 허용되는 마스크는 다음과 같습니다:
 
 | Mask       | Description      | | Mask       | Description          |
 | :--------: | ---------------- |-| :--------: | -------------------- |
@@ -102,25 +92,20 @@ subscriptions. The following masks are allowed:
 | `(1L<<10)` | Button3MotionMask| | `(1L<<23)` | ColormapChangeMask   |
 | `(1L<<11)` | Button4MotionMask| | `(1L<<24)` | OwnerGrabButtonMask  |
 
-## Hooking into events
+## 이벤트 후킹하기
 
 ### mlx_hook
 
-Hooking into events is one of the most powerful tools that MiniLibX provides. It
-allows you to register to any of the aforementioned events with the call of a
-simple hook registration function. 
-
-To achieve this, we call the function `mlx_hook`.
-
+이벤트를 후킹하는건 MiniLibX에서 제공하는 가장 강력한 도구 중 하나입니다. 이를 통해 간단한 후킹 등록 함수 호출로 앞서 언급된 모든 이벤트에 등록 가능합니다.
 ```c
 void mlx_hook(mlx_win_list_t *win_ptr, int x_event, int x_mask, int (*f)(), void *param)
 ```
 
-*Some version of mlbx doesn't implement `x_mask` and whatever the value there will be no mask.*
+*일부 버전의 MiniLibX는 `x_mask`를 구현하지 않으며, 그 값이 무엇이든 상관없이 마스크는 적용되지 않습니다.*
 
-### Prototype of event functions
+### 이벤트 함수의 프로토 타입
 
-Event functions have a different prototype depending of the hooking event.
+이벤트 함수는 후킹 이벤트에 따라 다른 프로토타입을 가집니다.
 
 | Hooking event | code | Prototype            |
 | ------------- | :--: | -------------------- |
@@ -134,18 +119,17 @@ Event functions have a different prototype depending of the hooking event.
 
 *\*Has mlx_hook alias.*
 
-### Hooking alias
+### Hooking 별칭(alias)
 
 Minilibx api has some alias hooking function:
 
- - `mlx_expose_hook` function is an alias of mlx_hook on expose event (`12`).
- - `mlx_key_hook` function is an alias of mlx_hook on key up event (`3`).
- - `mlx_mouse_hook` function is an alias of mlx_hook on mouse down event (`4`).
+ - `mlx_expose_hook`함수는 expose 이벤트(`12`)에 관한 `mlx_hook`의 별칭입니다.
+ - `mlx_key_hook`  함수는 키 업 이벤트(`3`)에 대한 `mlx_hook`의 별칭입니다.
+ - `mlx_mouse_hook` 함수는 마우스 다운 이벤트(`4`)에 대한 `mlx_hook`의 별칭입니다.
 
-### Example
+### 예제
 
-For example instead of calling `mlx_key_hook`, we can also register to the
-`KeyPress` and `KeyRelease` events. Lets take a look:
+예를 들어, `mlx_key_hook`를 호출하는 대신, `KeyPress`와 `KeyRelease` 이벤트에 등록할 수도 있습니다. 
 
 ```c
 #include <mlx.h>
@@ -172,8 +156,7 @@ int	main(void)
 }
 ```
 
-Here we register to the `KeyPress` event with the according `KeyPressMask`. Now
-whenever we press a key, the window will be closed.
+여기서는 `KeyPress` 이벤트에 해당하는 `KeyPressMask`로 등록합니다. 이제 키를 누를 때마다 윈도우가 닫히게 됩니다.
 
 ## Test your skills!
 

@@ -17,12 +17,8 @@ nav_order: 9
 
 ---
 
-Now that you have finally completed the entire tutorial, you can finally say
-that you are a true master on MiniLibX. We have also created documentation for
-each function in case you quickly need to look it up or forgot what the
-according prototype was [over here](./prototypes.html).
+이제 모든 튜토리얼을 완전히 마쳤으므로, MiniLibX의 진정한 전문가라고 말할 수 있겠네요. 또한 각 함수에 관한 프로토타입을[여기에](./prototypes.html)작성 해놨으니 빠르게 찾아보거나 잊어버렸을때 참고할 수 있습니다.
 
-If you think something is missing from this tutorial, feel free to hit us up
-with a pull request and we will check it ASAP.
+이 튜토리얼에서 부족한 부분이 있다고 생각되면, 언제든지 풀 리퀘스트를 보내주세요. 최대한 빠르게 확인하고 반영하겠습니다.
 
 Good luck with your projects!

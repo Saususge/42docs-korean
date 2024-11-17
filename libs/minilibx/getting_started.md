@@ -17,17 +17,17 @@ nav_order: 2
 
 ---
 
-## Introduction
+## 소개
 
 이제 MiniLibX로 뭘 할지 알았으니, 아주 기초적인 작업들을 해 보겠습니다. 이는 이 라이브러리를 이용해 어떻게 좋은 성능을 내는 코드를 짜는지에 관한 이해를 시켜 줄 겁니다. 많은 프로젝트에서 핵심은 성능이기 때문에 이 페이지를 확실하게 읽고 이해하는 것이 중요합니다.
 
-## Installation
+## 설치
 
-### Compilation on macOS
+### macOS에서의 컴파일
 
-MiniLibX가 MacOS의 Cocoa(AppKit)와 OpenGL을 요구하기 때문에 이들을 link해야 함으로 컴파일 과정이 복잡할수 있습니다. 기본적인 컴파일 과정은 아래와 같습니다.
+MiniLibX가 MacOS의 Cocoa(AppKit)와 OpenGL을 요구하기 때문에 이들을 연결해야 함으로 컴파일 과정이 복잡할수 있습니다. 기본적인 컴파일 과정은 아래와 같습니다.
 
-프로젝트의 최상위 폴더에 mlx라는 이름의 폴더에서 mlx라는 소스거 있다고 가정할때 오브젝트 파일을 위해 Makefile에 다음과 같은 규칙을 추가할 수 있습니다.
+프로젝트의 최상위 폴더에 mlx라는 이름의 폴더에서 mlx라는 소스가 있다고 가정할때 오브젝트 파일을 위해 Makefile에 다음과 같은 규칙을 추가할 수 있습니다.
 
 ```makefile
 %.o: %.c
@@ -43,12 +43,12 @@ $(NAME): $(OBJ)
 
 주의: `libmlx.dylib` 파일은 동적 라이브러리기 때문에 빌드 타겟과 같은 디렉토리에 위치해있어야 합니다!
 
-### Compilation on Linux
+### 리눅스에서의 컴파일
 
 리눅스는 Codam에서 제공하는 리눅스호환 버전 MLX를 사용 가능합니다.[mlx-linux](https://github.com/42Paris/minilibx-linux).
 프로젝트 루트에 새로운 폴더 `mlx_linux`를 만든 후, 그 폴더에 Linux용 MLX를 압축풀기 하면 됩니다. 
 이 라이브러리는 original-mlx와 동일한 함수와 함수호출들을 제공합니다. 다만 시스템 아키텍쳐에 따라 이미지에서 메모리 매직을 사용하는 객체의 구현이 달라질 수 있다는 점은 유의해야 합니다.
-
+ 
 
 MiniLibX for Linux는 `xorg`, `x11`, `zlib`가 필요하기 때문에 의존성 패키지인 `xorg`, `libxext-dev`, `zlib1g-dev`를 설치할 필ㅇ가 있습니다.
 우분투에서 설치하는법은 다음과 같습니다:
@@ -71,18 +71,18 @@ $(NAME): $(OBJ)
 	$(CC) $(OBJ) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
 ```
 
-### Getting a screen on Windows 10 (WSL2)
+### Win10 에서 윈도우 띄우기 (WSL2)
 
 Win10 WSL환경에대한 설치는 원문을 참고해주세요
 
-[Getting started](https://harm-smits.github.io/42docs/libs/minilibx/getting_started.html#getting-a-screen-on-windows-10-wsl2)
+[Win10에서의 gui 어플리케이션 실행법](https://harm-smits.github.io/42docs/libs/minilibx/getting_started.html#getting-a-screen-on-windows-10-wsl2)
 
-### Getting a screen on Windows 11 (WSLg)
+### Win11에서 윈도우 띄우기 (WSLg)
 
 Win11에서 WSL 설치시 그래픽 application 실행을 위한 WSLg가 자동 설치되기 때문에 별도의 설치가 필요없습니다만 만약 실행이 되지 않는다면 
 [Linux용 Windows 하위 시스템 Linux GUI 앱 실행](https://learn.microsoft.com/ko-kr/windows/wsl/tutorials/gui-apps)을 참고하세요.
 
-## Initialization
+## 초기화
 
 우리가 MiniLibX로 뭐라도 하려면 `<mlx.h>` 헤더를 추가해 모든 함수에 접근을 가능하게 해야하고
 `mlx_init` 함수를 실행해야 합니다. 이는 그래픽 시스템에 연결 설정 후에 현재 MLX 인스턴스의 위치를 담고있는 `void *`를 반환 합니다.
@@ -120,20 +120,16 @@ int	main(void)
 }
 ```
 
-## Writing pixels to a image
+## 이미지에 픽셀 쓰기
 
 이제 기본적인 윈도우 관리를 할수있으니, 윈도우에 픽셀을 그릴 수 있습니다.
 픽셀을 어떻게 놓을지는 선택에 따라 다르지만, 여기서는 최적화된 방법에 대해서도 다루겠습니다.
 일단 `mlx_pixel_put`함수가 매우 느리다는것을 염두해 두세요. 이는 픽셀을 frame이 완전히 렌더링되기를 기다리지 않고 바로 그리려고 하기 때문입니다. 즉, 픽셀을 즉시 윈도우에 푸시하려고 하기 때문이죠.
 때문에 우리는 모든 픽셀을 먼저 이미지에 버퍼링 후, 이미지를 윈도우에 푸시해야 합니다. 너무 복잡하게 들리겠지만 걱정하지마세요! 그렇게 어렵지 않습니다.
-First of all, we should start by understanding what type of image `mlx`
-requires. If we initiate an image, we will have to pass a few pointers to which
-it will write a few important variables. The first one is the `bpp`, also called
-the bits per pixel. As the pixels are basically ints, these usually are 4 bytes,
-however, this can differ if we are dealing with a small endian (which means we
-most likely are on a remote display and only have 8 bit colors).
+일단 우리는 `mlx`가 어떤 유형의 이미지를 필요로 하는지 알아야 합니다.
+이미지를 초기화 하려면 중요한 변수들을 저장하는 몇가지 포인터를 전달해야합니다. 첫 번째 변수는 `bpp`(bits per pixel) 즉, 픽셀당 비트수 입니다. 픽셀은 기본적으로 int로 처리되기 때문에 보통 4바이트입니다. 하지만 remote display에서 8비트 색상만 지원되듯이 이런식으로 small endian방식을 차용하는 경우에는 이 값이 달라질 수 있습니다.
 
-Now we can initialize the image with size 1920×1080 as follows:
+이제 우린 1920×1080의 사이즈를 갖는 이미지를 초기화 할 수 있습니다:
 
 ```c
 #include <mlx.h>
@@ -148,9 +144,7 @@ int	main(void)
 }
 ```
 
-That wasn't too bad, was it? Now, we have an image but how exactly do we write
-pixels to this? For this we need to get the memory address on which we will
-mutate the bytes accordingly. We retrieve this address as follows:
+그렇게 어렵지 않았죠? 이제 이미지를 생성했으니, 여기에 어떻게 픽셀을 정확히 쓸수 있을까요? 이를 위해선 우리가 바이트를 변경할 메모리 주소를 얻어와야 합니다. 이 주소를 얻는 방법은 다음과 같습니다:
 
 ```c
 #include <mlx.h>
@@ -172,32 +166,25 @@ int	main(void)
 	img.img = mlx_new_image(mlx, 1920, 1080);
 
 	/*
-	** After creating an image, we can call `mlx_get_data_addr`, we pass
-	** `bits_per_pixel`, `line_length`, and `endian` by reference. These will
-	** then be set accordingly for the *current* data address.
+	** 이미지 생성 후, mlx_get_data_addr를 호출할 수 있습니다. 이 함수에 bits_per_pixel, line_length, 그리고 endian을 참조로 전달해야 합니다. 그러면 현재 데이터 주소에 맞게 이 값들이 설정됩니다."
 	*/
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								&img.endian);
 }
 ```
 
-Notice how we pass the `bits_per_pixel`, `line_length` and `endian` variables
-by reference? These will be set accordingly by MiniLibX as per described above.
+우리가 어떻게 `bits_per_pixel`, `line_length`, `endian` 값들을 어떻게 참조로 전달하는지 깨달으셨나요? 위에서 설명했듯이 이 값들은 MiniLibX에 의해 적절하게 설정 됩니다.
 
-Now we have the image address, but still no pixels. Before we start with this,
-we must understand that the bytes are not aligned, this means that the
-`line_length` differs from the actual window width. We therefore should ALWAYS
-calculate the memory offset using the line length set by `mlx_get_data_addr`.
+이제 이미지의 주소는 있지만 픽셀들은 없습니다. 시작하기 전에 우리는 바이트가 정렬되지 않는다는 점을 이해해야 합니다.
+그 말은`line_length`는 실제 윈도우의 너비와 다를 수 있다는 말입니다.때문에 우리는 항상 `mlx_get_data_addr`에서 설정된 line_length를 이용해 메모리 오프셋을 계산해야 합니다.
 
-We can calculate it very easily by using the following formula:
+우리는 이 식으로 아주 쉽게 계산 가능합니다:
 
 ```c
 int offset = (y * line_length + x * (bits_per_pixel / 8));
 ```
 
-Now that we know where to write, it becomes very easy to write a function that
-will mimic the behaviour of `mlx_pixel_put` but will simply be many times
-faster:
+이제 우리는 어디에 데이터를 써야하는지 알았으니, mlx_pixel_put이 하는걸 모방하지만 훨씬 몇배나 빠르게 작동하는 함수를 작성하는것이 매우 쉬워집니다.
 
 ```c
 typedef struct	s_data {
@@ -217,17 +204,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 ```
 
-Note that this will cause an issue. Because an image is represented in real time
-in a window, changing the same image will cause a bunch of screen-tearing when
-writing to it. You should therefore create two or more images to hold your
-frames temporarily. You can then write to a temporary image, so that you don't
-have to write to the currently presented image.
+이 방식은 이미지가 윈도우에서 실시간으로 표현되기 때문에 동일한 이미지를 변경하면 작성하는 동안 화면 찢김(screen-tearing)현상이 발생 할 수 있다는 점에 유의해야 합니다. 따라서 임시로 프레임을 저장할 두 개 이상의 이미지를 생성하는것이 좋으며 이렇게 하면 현재 표시중인 이미지가 아닌 임시 이미지에 작성 가능합니다.
 
-## Pushing images to a window
+## 이미지를 윈도우에 출력하기
 
-Now that we can finally create our image, we should also push it to the window,
-so that we can actually see it. This is pretty straight forward, let's take a
-look at how we can write a red pixel at (5,5) and put it to our window:
+이제 이미지를 생성할 수 있으니 이를 실제로 윈도우에 출력해 직접 눈으로 볼 수 있게 해야합니다. 간단하게 (5,5)에 위치한 빨간색의 픽셀을 작성해 이를 윈도우에 출력하는 방법을 살펴보겠습니다:
 
 ```c
 #include <mlx.h>
@@ -257,7 +238,7 @@ int	main(void)
 }
 ```
 
-Note that `0x00FF0000` is the hex representation of `ARGB(0,255,0,0)`.
+`0x00FF0000` 는 16진수 표현으로 `ARGB(0,255,0,0)(빨간색)`입니다.
 
 ## Test your skills!
 
